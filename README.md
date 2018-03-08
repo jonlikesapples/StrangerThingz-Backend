@@ -2,6 +2,8 @@
 
 pip install flask
 
+pip install pyrebase
+
 **Once Installed**
 
 export FLASK_APP=app.py
