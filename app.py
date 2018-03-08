@@ -18,7 +18,11 @@ firebase = pyrebase.initialize_app(config)
 db = firebase.database()
 
 #get from firebase server
-@app.route("/", methods=['GET'])
+@app.route("/")
+def nothing():
+	return "WELCOME TO STRANGER THINGS! <br> \
+	possible endpoints: <br> /allusers <br> /post <br> /delete"
+@app.route("/allusers", methods=['GET'])
 def get():
 	# queryresult = db.child("users").get().val() #type orderedDict
 	# data = json.loads(json.dumps(queryresult)) #type (regular) dict
@@ -26,25 +30,25 @@ def get():
 	QUERY_RESULT = ""
 	dbresult = db.child("users").get() #type orderedDict
 	for user in dbresult.each(): 
-		QUERY_RESULT += "key: " + user.key() + " " + "val: " + user.val() + "\n"
+		QUERY_RESULT += "key: " + str(user.key()) + " " + "val: " + str(user.val()) + "<br>"
 	return QUERY_RESULT
 
 @app.route('/post')
 def redirect():
-	data = {"name": "Mortimer 'Morty' Smith"}
-	db.child("users").push(data)
-	return "hi"
+	data = {"name": "aang the avatar"}
+	age = {"age": "12"}
+	db.child("users").child("account2").update(data) #ALWAYS USE .UPDATE to post, will create a new key too
+	db.child("users").child("account2").update(age)
+	return "posted"
 
-@app.route("/post/<param>",)
+@app.route("/update")
 def post(param):
-	
-	return key
-	#return param + " was posted."
+	return "nothing."
 
 @app.route("/delete")
 def delete():
-
-	return 
+	db.child("users").child("account2").remove()
+	return "deleted"
 
 if __name__ == '__main__':
     app.run(debug=True)
