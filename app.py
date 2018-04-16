@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 import json
 import pyrebase
 
@@ -33,13 +33,17 @@ def get():
 		QUERY_RESULT += "key: " + str(user.key()) + " " + "val: " + str(user.val()) + "<br>"
 	return QUERY_RESULT
 
+#Format: /foods?var1=value&var2=value2&...
 @app.route('/post')
 def redirect():
-	data = {"name": "aang the avatar"}
-	age = {"age": "12"}
-	db.child("users").child("account2").update(data) #ALWAYS USE .UPDATE to post, will create a new key too
-	db.child("users").child("account2").update(age)
-	return "posted"
+	value = str(request.args.get('testvalue'));
+	postedvalue = {"name": value }
+	#ALWAYS USE .UPDATE to post, will create a new key too
+	#.update has to take in a JSON object.
+	db.child("users").child("testaccount").update(postedvalue);
+	return value + "ABC";
+
+
 
 @app.route("/update")
 def post(param):
@@ -52,3 +56,5 @@ def delete():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+    
