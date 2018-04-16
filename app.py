@@ -24,7 +24,7 @@ firebase = pyrebase.initialize_app(config)
 
 db = firebase.database()
 
-#get from firebase server
+#get from firebase server.
 @app.route("/")
 def nothing():
 	return "WELCOME TO STRANGER THINGS! <br> \
