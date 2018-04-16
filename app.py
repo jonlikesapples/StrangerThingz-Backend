@@ -20,10 +20,26 @@ config = {
   "storageBucket": "stranger-things-ce12a.appspot.com",
 }
 
+
+'''
+TODO: 
+CHANGE KEY TO 'ACCOUNT' + GETCOUNT()
+ENCRYPT PASSWORD
+'''
 firebase = pyrebase.initialize_app(config)
 
 db = firebase.database()
 
+def getcount():
+	dbresult = db.child("totalnumofusers").get()
+	QUERY_RESULT = ""
+	getcount = 123
+	for user in dbresult.each(): 
+		QUERY_RESULT += "key: " + str(user.key()) + " " + "val: " + str(user.val()) + "<br>"
+		getcount = user.val();
+		break;
+	return str(getcount);
+	
 #get from firebase server.
 @app.route("/")
 def nothing():
@@ -32,7 +48,7 @@ def nothing():
 
 @app.route("/test")
 def test():
-	return "TEST"
+	return getcount();
 
 @app.route("/allusers", methods=['GET'])
 def get():
@@ -46,7 +62,7 @@ def get():
 	return QUERY_RESULT;
 
 @app.route('/getcount') #gets total count
-def getcount():
+def count():
 	dbresult = db.child("totalnumofusers").get()
 	QUERY_RESULT = ""
 	getcount = 123
@@ -55,6 +71,9 @@ def getcount():
 		getcount = user.val();
 		break;
 	return str(getcount);
+
+def testfunction():
+	return 1;
 
 @app.route('/addcount') #increments count by 1
 def addcount():
@@ -74,12 +93,15 @@ def addcount():
 #Format: /foods?var1=value&var2=value2&...
 @app.route('/post')
 def redirect():
-	value = str(request.args.get('testvalue'));
-	postedvalue = {"name": value }
+	usernameValue = str(request.args.get('username'));
+	passwordValue = str(request.args.get('password'));
+
+	postedvalue = {"username": usernameValue,
+				   "password": passwordValue }
 	#ALWAYS USE .UPDATE to post, will create a new key too
 	#.update has to take in a JSON object.
 	db.child("users").child("testaccount").update(postedvalue);
-	return value;
+	return "posted username: " + usernameValue + "\npassword: " + passwordValue;
 
 
 
