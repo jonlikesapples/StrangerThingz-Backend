@@ -28,7 +28,7 @@ db = firebase.database()
 @app.route("/")
 def nothing():
 	return "WELCOME TO STRANGER THINGS! <br> \
-	possible endpoints: <br> /allusers <br> /post <br> /delete"
+	possible endpoints: <br> /allusers <br> /post <br> /delete <br> /getcount <br> /addcount"
 
 @app.route("/test")
 def test():
@@ -45,7 +45,7 @@ def get():
 		QUERY_RESULT += "key: " + str(user.key()) + " " + "val: " + str(user.val()) + "<br>"
 	return QUERY_RESULT;
 
-@app.route('/getcount')
+@app.route('/getcount') #gets total count
 def getcount():
 	dbresult = db.child("totalnumofusers").get()
 	QUERY_RESULT = ""
@@ -56,7 +56,7 @@ def getcount():
 		break;
 	return str(getcount);
 
-@app.route('/addcount')
+@app.route('/addcount') #increments count by 1
 def addcount():
 	dbresult = db.child("totalnumofusers").get()
 	QUERY_RESULT = ""
@@ -68,7 +68,7 @@ def addcount():
 
 	addcount = {"count": newcount }
 	dbresult = db.child("totalnumofusers").update(addcount);
-	return "some stuff happened"
+	return "count was incremented by 1, see firebase console."
 
 
 #Format: /foods?var1=value&var2=value2&...
