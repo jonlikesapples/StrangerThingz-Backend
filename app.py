@@ -23,6 +23,7 @@ db = firebase.database()
 def nothing():
 	return "WELCOME TO STRANGER THINGS! <br> \
 	possible endpoints: <br> /allusers <br> /post <br> /delete"
+
 @app.route("/allusers", methods=['GET'])
 def get():
 	# queryresult = db.child("users").get().val() #type orderedDict
@@ -56,7 +57,6 @@ def delete():
 	return "deleted"
 
 if __name__ == '__main__':
-    app.run(debug=True)
     from os import environ;
     app.run(debug=True, host='0.0.0.0', port=int(environ.get("PORT", 5000)));
 
