@@ -30,6 +30,10 @@ def nothing():
 	return "WELCOME TO STRANGER THINGS! <br> \
 	possible endpoints: <br> /allusers <br> /post <br> /delete"
 
+@app.route("/test")
+def test():
+	return "TEST"
+
 @app.route("/allusers", methods=['GET'])
 def get():
 	# queryresult = db.child("users").get().val() #type orderedDict
@@ -41,12 +45,31 @@ def get():
 		QUERY_RESULT += "key: " + str(user.key()) + " " + "val: " + str(user.val()) + "<br>"
 	return QUERY_RESULT;
 
-@app.route("/getcount")
+@app.route('/getcount')
 def getcount():
 	dbresult = db.child("totalnumofusers").get()
+	QUERY_RESULT = ""
+	getcount = 123
 	for user in dbresult.each(): 
 		QUERY_RESULT += "key: " + str(user.key()) + " " + "val: " + str(user.val()) + "<br>"
-	return QUERY_RESULT;
+		getcount = user.val();
+		break;
+	return str(getcount);
+
+@app.route('/addcount')
+def addcount():
+	dbresult = db.child("totalnumofusers").get()
+	QUERY_RESULT = ""
+	newcount = 123
+	for user in dbresult.each(): 
+		QUERY_RESULT += "key: " + str(user.key()) + " " + "val: " + str(user.val()) + "<br>"
+		newcount = user.val() + 1;
+		break;
+
+	addcount = {"count": newcount }
+	dbresult = db.child("totalnumofusers").update(addcount);
+	return "some stuff happened"
+
 
 #Format: /foods?var1=value&var2=value2&...
 @app.route('/post')
