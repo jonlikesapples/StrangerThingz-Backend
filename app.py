@@ -3,6 +3,12 @@ import os
 import json
 import pyrebase
 
+'''
+git add .
+git commit -m "commit message"
+git push heroku master
+https://strangerthingz-backend.herokuapp.com
+'''
 app = Flask(__name__)
 
 #https://github.com/thisbejim/Pyrebase
@@ -33,7 +39,14 @@ def get():
 	dbresult = db.child("users").get() #type orderedDict
 	for user in dbresult.each(): 
 		QUERY_RESULT += "key: " + str(user.key()) + " " + "val: " + str(user.val()) + "<br>"
-	return QUERY_RESULT
+	return QUERY_RESULT;
+
+@app.route("/getcount")
+def getcount():
+	dbresult = db.child("totalnumofusers").get()
+	for user in dbresult.each(): 
+		QUERY_RESULT += "key: " + str(user.key()) + " " + "val: " + str(user.val()) + "<br>"
+	return QUERY_RESULT;
 
 #Format: /foods?var1=value&var2=value2&...
 @app.route('/post')
