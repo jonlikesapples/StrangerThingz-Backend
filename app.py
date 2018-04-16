@@ -43,7 +43,7 @@ def redirect():
 	#ALWAYS USE .UPDATE to post, will create a new key too
 	#.update has to take in a JSON object.
 	db.child("users").child("testaccount").update(postedvalue);
-	return value + "ABC";
+	return value;
 
 
 
