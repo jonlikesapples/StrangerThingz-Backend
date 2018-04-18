@@ -2,7 +2,6 @@ from flask import Flask, jsonify, request
 import os
 import json
 import pyrebase
-
 '''
 git add .
 git commit -m "commit message"
@@ -25,7 +24,11 @@ config = {
 TODO: 
 CHANGE KEY TO 'ACCOUNT' + GETCOUNT()
 ENCRYPT PASSWORD
+increment count everytime you add an account
+- won't push if username already exists
+delete one individual account, based on username
 '''
+
 firebase = pyrebase.initialize_app(config)
 
 db = firebase.database()
