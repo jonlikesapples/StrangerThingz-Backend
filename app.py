@@ -42,6 +42,18 @@ def getcount():
 		getcount = user.val();
 		break;
 	return str(getcount);
+
+def inccount():
+	dbresult = db.child("totalnumofusers").get()
+	QUERY_RESULT = ""
+	newcount = 123
+	for user in dbresult.each(): 
+		QUERY_RESULT += "key: " + str(user.key()) + " " + "val: " + str(user.val()) + "<br>"
+		newcount = user.val() + 1;
+		break;
+
+	addcount = {"count": newcount }
+	dbresult = db.child("totalnumofusers").update(addcount);
 	
 #get from firebase server.
 @app.route("/")
@@ -103,8 +115,10 @@ def redirect():
 				   "password": passwordValue }
 	#ALWAYS USE .UPDATE to post, will create a new key too
 	#.update has to take in a JSON object.
-	db.child("users").child("testaccount").update(postedvalue);
-	return "posted username: " + usernameValue + "\npassword: " + passwordValue;
+	endpoint = "testaccount" + getcount();
+	db.child("users").child(endpoint).update(postedvalue);
+	addcount();
+	return "posted username: " + usernameValue + "\npassword: " + passwordValue + "\nat " + endpoint;
 
 
 
