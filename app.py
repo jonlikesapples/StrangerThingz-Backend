@@ -22,7 +22,6 @@ config = {
 
 '''
 TODO: 
-CHANGE KEY TO 'ACCOUNT' + GETCOUNT()
 ENCRYPT PASSWORD
 increment count everytime you add an account
 - won't push if username already exists
@@ -55,11 +54,18 @@ def inccount():
 	addcount = {"count": newcount }
 	dbresult = db.child("totalnumofusers").update(addcount);
 	
+def resetcount():
+	dbresult = db.child("totalnumofusers").get()
+	resettedcount = {"count": 1}
+	db.child("totalnumofusers").update(resettedcount);
+
 #get from firebase server.
 @app.route("/")
 def nothing():
-	return "WELCOME TO STRANGER THINGS! <br> \
-	possible endpoints: <br> /allusers <br> /post <br> /delete <br> /getcount <br> /addcount"
+	return "Welcome to the Stranger Thingz backend, powered by Flask. <br> \
+	Created for CMPE195A-Senior Project at SJSU for Fall 2018 - Spring 2019. <br> \
+	Authors: Gwyneth Mina, Christopher Navy, Brendan Hui, and Jonathan Wong. <br> <br> \
+	possible endpoints: <br> /allusers <br> /post?username=USERNAME&password=PASSWORD <br> /deleteallusers <br> /getcurrentcount <br>"
 
 @app.route("/test")
 def test():
@@ -76,36 +82,12 @@ def get():
 		QUERY_RESULT += "key: " + str(user.key()) + " " + "val: " + str(user.val()) + "<br>"
 	return QUERY_RESULT;
 
-@app.route('/getcount') #gets total count
+@app.route('/getcurrentcount') #gets total count
 def count():
-	dbresult = db.child("totalnumofusers").get()
-	QUERY_RESULT = ""
-	getcount = 123
-	for user in dbresult.each(): 
-		QUERY_RESULT += "key: " + str(user.key()) + " " + "val: " + str(user.val()) + "<br>"
-		getcount = user.val();
-		break;
-	return str(getcount);
+	return "current count at  .../totalnumofusers/count is: " + getcount();
 
-def testfunction():
-	return 1;
-
-@app.route('/addcount') #increments count by 1
-def addcount():
-	dbresult = db.child("totalnumofusers").get()
-	QUERY_RESULT = ""
-	newcount = 123
-	for user in dbresult.each(): 
-		QUERY_RESULT += "key: " + str(user.key()) + " " + "val: " + str(user.val()) + "<br>"
-		newcount = user.val() + 1;
-		break;
-
-	addcount = {"count": newcount }
-	dbresult = db.child("totalnumofusers").update(addcount);
-	return "count was incremented by 1, see firebase console."
-
-
-#Format: /foods?var1=value&var2=value2&...
+#Format: /post?username=(username)&password=(password)
+#if post has no params, will just post username: "None" | password: "None"
 @app.route('/post')
 def redirect():
 	usernameValue = str(request.args.get('username'));
@@ -120,17 +102,16 @@ def redirect():
 	addcount();
 	return "posted username: " + usernameValue + "\npassword: " + passwordValue + "\nat " + endpoint;
 
-
-
-@app.route("/update")
-def post(param):
-	return "nothing."
-
-@app.route("/delete")
+@app.route("/deleteallusers")
 def delete():
-	db.child("users").child("account2").remove()
-	return "deleted"
+	resetcount();
+	db.child("users").remove()
+	return "deleted all users and reset count to 1"
 
+
+##################################################################################################################################
+#######################################[DON'T TOUCH] Serverside stuff to connect to Heroku #######################################
+##################################################################################################################################
 if __name__ == '__main__':
     from os import environ;
     app.run(debug=True, host='0.0.0.0', port=int(environ.get("PORT", 5000)));
