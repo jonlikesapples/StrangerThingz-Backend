@@ -2,6 +2,8 @@ from flask import Flask, jsonify, request
 import os
 import json
 import pyrebase
+import hashlib
+#https://github.com/thisbejim/Pyrebase
 '''
 git add .
 git commit -m "commit message"
@@ -10,15 +12,15 @@ https://strangerthingz-backend.herokuapp.com
 '''
 app = Flask(__name__)
 
-#https://github.com/thisbejim/Pyrebase
 
+#####################################[DON'T TOUCH] FIREBASE CONFIG #############################################
 config = {
   "apiKey": "AIzaSyAb0csAFZDQoYIJrflFTuYAwx7rS1t3oYg",
   "authDomain": "stranger-things-ce12a.firebaseapp.com",
   "databaseURL": "https://stranger-things-ce12a.firebaseio.com/",
   "storageBucket": "stranger-things-ce12a.appspot.com",
 }
-
+################################################################################################################
 
 '''
 TODO: 
@@ -59,6 +61,10 @@ def resetcount():
 	resettedcount = {"count": 1}
 	db.child("totalnumofusers").update(resettedcount);
 
+def sha256encrypt(hash_string):
+    encryptedPassword = hashlib.sha256(hash_string.encode()).hexdigest()
+    return encryptedPassword	
+
 #get from firebase server.
 @app.route("/")
 def nothing():
@@ -69,7 +75,7 @@ def nothing():
 
 @app.route("/test")
 def test():
-	return getcount();
+	return sha256encrypt("password");
 
 @app.route("/allusers", methods=['GET'])
 def get():
@@ -91,7 +97,8 @@ def count():
 @app.route('/post')
 def redirect():
 	usernameValue = str(request.args.get('username'));
-	passwordValue = str(request.args.get('password'));
+	passwordValue = sha256encrypt(str(request.args.get('password')));
+	
 
 	postedvalue = {"username": usernameValue,
 				   "password": passwordValue }
@@ -99,7 +106,7 @@ def redirect():
 	#.update has to take in a JSON object.
 	endpoint = "testaccount" + getcount();
 	db.child("users").child(endpoint).update(postedvalue);
-	addcount();
+	inccount();
 	return "posted username: " + usernameValue + "\npassword: " + passwordValue + "\nat " + endpoint;
 
 @app.route("/deleteallusers")
