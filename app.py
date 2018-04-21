@@ -24,7 +24,7 @@ config = {
 
 '''
 TODO: 
-ENCRYPT PASSWORD
+ENCRYPT PASSWORD (FRONT END)
 increment count everytime you add an account
 - won't push if username already exists
 delete one individual account, based on username
@@ -71,7 +71,7 @@ def nothing():
 	return "Welcome to the Stranger Thingz backend, powered by Flask. <br> \
 	Created for CMPE195A-Senior Project at SJSU for Fall 2018 - Spring 2019. <br> \
 	Authors: Gwyneth Mina, Christopher Navy, Brendan Hui, and Jonathan Wong. <br> <br> \
-	possible endpoints: <br> /allusers <br> /post?username=USERNAME&password=PASSWORD <br> /deleteallusers <br> /getcurrentcount <br>"
+	possible endpoints: <br> /allusers <br> /post?username=USERNAME&password=PASSWORD (encrypted with sha256) <br> /deleteallusers <br> /getcurrentcount <br>"
 
 @app.route("/test")
 def test():
