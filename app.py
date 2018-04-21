@@ -75,7 +75,7 @@ def nothing():
 
 @app.route("/test")
 def test():
-	return sha256encrypt("password");
+	return "this endpoint exists only for testing"
 
 @app.route("/allusers", methods=['GET'])
 def get():
