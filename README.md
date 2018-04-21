@@ -1,13 +1,5 @@
-**Make sure you have Flask installed**
+**Stranger Thingz Backend, powered by Flask**
 
-pip install flask
+Created for CMPE195A-Senior Project at SJSU for Fall 2018 - Spring 2019. 
 
-pip install pyrebase
-
-**Once Installed**
-
-export FLASK_APP=app.py
-
-export FLASK_DEBUG=1
-
-flask run
+Authors: Gwyneth Mina, Christopher Navy, Brendan Hui, and Jonathan Wong. 
