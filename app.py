@@ -74,6 +74,7 @@ def nothing():
 	/allusers <br> \
 	/authpost?email=EMAIL@DOMAIN.COM&password=PASSWORD <br>\
 	/authlogin?email=EMAIL@DOMAIN.COM&password=PASSWORD <br> \
+	/authresetpassword?email=EMAIL@DOMAIN.COM <br> \
 	last commit: 4/25/2018"
 
 @app.route("/test")
