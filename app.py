@@ -3,6 +3,7 @@ import os
 import json
 import pyrebase
 import hashlib
+import datetime
 #https://github.com/thisbejim/Pyrebase
 '''
 git add .
@@ -34,14 +35,15 @@ firebase = pyrebase.initialize_app(config)
 
 db = firebase.database()
 
+auth = firebase.auth();
+
 def getcount():
 	dbresult = db.child("totalnumofusers").get()
 	QUERY_RESULT = ""
 	getcount = 123
 	for user in dbresult.each(): 
 		QUERY_RESULT += "key: " + str(user.key()) + " " + "val: " + str(user.val()) + "<br>"
-		getcount = user.val();
-		break;
+		getcount = user.val()
 	return str(getcount);
 
 def inccount():
@@ -71,14 +73,48 @@ def nothing():
 	return "Welcome to the Stranger Thingz backend, powered by Flask. <br> \
 	Created for CMPE195A-Senior Project at SJSU for Fall 2018 - Spring 2019. <br> \
 	Authors: Gwyneth Mina, Christopher Navy, Brendan Hui, and Jonathan Wong. <br> <br> \
-	possible endpoints: <br> /allusers <br> /post?username=USERNAME&password=PASSWORD(encrypted with sha256) \
-	<br> /deleteallusers <br> /getcurrentcount <br> last commit: 4/25/2018"
+	possible endpoints: <br>\
+	/allusers <br> \
+	/authpost?email=EMAIL@DOMAIN.com&password=PASSWORD <br>\
+	/authlogin?email=EMAIL@DOMAIN.COM&password=PASSWORD <br> \
+	last commit: 4/25/2018"
 
 @app.route("/test")
 def test():
+	now = datetime.datetime.now()
+	print str(now)
 	return "this endpoint exists only for testing"
 
+#DOESN'T WORK PROPERLY
+@app.route("/authpost")
+def specialpost():
+	email = str(request.args.get('email'));
+	#password = sha256encrypt(str(request.args.get('password')));
+	password = str(request.args.get('password'));
+	user = auth.create_user_with_email_and_password(email, password);
 
+	now = datetime.datetime.now()
+	print str(now)
+
+	data = {
+	"dateCreated": str(now),
+	"importantinfo": "this is the entry for: " + email
+		}
+
+	results = db.child("users").child(user['localId']).set(data)
+	return "posted <br> \
+	" + json.dumps(auth.get_account_info(user['idToken']));
+
+#ALSO WORK PROPERLY
+@app.route("/authlogin")
+def speciallogin():
+	email = str(request.args.get('email'));
+	#password = sha256encrypt(str(request.args.get('password')));
+	password = str(request.args.get('password'));	
+	user = auth.sign_in_with_email_and_password(email, password);
+	localid = str(user['localId']);
+	info = db.child("users").child(localid).get().val();
+	return json.dumps(info);
 
 @app.route("/allusers", methods=['GET'])
 def get():
@@ -105,7 +141,7 @@ def redirect():
 
 	postedvalue = {"username": usernameValue,
 				   "password": passwordValue,
-				   "info": "THIS IS INFO."}
+				   "info": "this is info of " + usernameValue}
 	#ALWAYS USE .UPDATE to post, will create a new key too
 	#.update has to take in a JSON object.
 	endpoint = "testaccount" + getcount();
@@ -116,6 +152,7 @@ def redirect():
 
 @app.route("/deleteallusers")
 def delete():
+	return "dont use this endpoint."
 	resetcount();
 	db.child("users").remove()
 	return "deleted all users and reset count to 1"
