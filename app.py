@@ -25,9 +25,6 @@ config = {
 
 '''
 TODO: 
-ENCRYPT PASSWORD (FRONT END)
-increment count everytime you add an account
-- won't push if username already exists
 delete one individual account, based on username
 '''
 
@@ -75,7 +72,7 @@ def nothing():
 	Authors: Gwyneth Mina, Christopher Navy, Brendan Hui, and Jonathan Wong. <br> <br> \
 	possible endpoints: <br>\
 	/allusers <br> \
-	/authpost?email=EMAIL@DOMAIN.com&password=PASSWORD <br>\
+	/authpost?email=EMAIL@DOMAIN.COM&password=PASSWORD <br>\
 	/authlogin?email=EMAIL@DOMAIN.COM&password=PASSWORD <br> \
 	last commit: 4/25/2018"
 
@@ -103,7 +100,6 @@ def specialpost():
 	return "posted <br> \
 	" + json.dumps(auth.get_account_info(user['idToken']));
 
-#ALSO WORK PROPERLY
 @app.route("/authlogin")
 def speciallogin():
 	email = str(request.args.get('email'));
@@ -113,6 +109,12 @@ def speciallogin():
 	localid = str(user['localId']);
 	info = db.child("users").child(localid).get().val();
 	return json.dumps(info);
+
+@app.route("/authresetpassword")
+def resetpassword():
+	email = str(request.args.get('email'));
+	auth.send_password_reset_email(email);
+	return "sent a password reset email to: " + email;
 
 @app.route("/allusers", methods=['GET'])
 def get():
@@ -133,6 +135,7 @@ def count():
 #if post has no params, will just post username: "None" | password: "None"
 @app.route('/post')
 def redirect():
+	return "don't use this endpoint."
 	usernameValue = str(request.args.get('username'));
 	passwordValue = sha256encrypt(str(request.args.get('password')));
 	
