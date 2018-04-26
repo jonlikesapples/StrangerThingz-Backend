@@ -82,8 +82,7 @@ def nothing():
 @app.route("/test")
 def test():
 	now = datetime.datetime.now()
-	print str(now)
-	return "this endpoint exists only for testing"
+	return str(now) + "<br> this endpoint exists solely for testing"
 
 #DOESN'T WORK PROPERLY
 @app.route("/authpost")
@@ -94,7 +93,6 @@ def specialpost():
 	user = auth.create_user_with_email_and_password(email, password);
 
 	now = datetime.datetime.now()
-	print str(now)
 
 	data = {
 	"dateCreated": str(now),
