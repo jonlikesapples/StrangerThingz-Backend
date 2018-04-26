@@ -72,7 +72,7 @@ def nothing():
 	Created for CMPE195A-Senior Project at SJSU for Fall 2018 - Spring 2019. <br> \
 	Authors: Gwyneth Mina, Christopher Navy, Brendan Hui, and Jonathan Wong. <br> <br> \
 	possible endpoints: <br> /allusers <br> /post?username=USERNAME&password=PASSWORD(encrypted with sha256) \
-	<br> /deleteallusers <br> /getcurrentcount <br>"
+	<br> /deleteallusers <br> /getcurrentcount <br> last commit: 4/25/2018"
 
 @app.route("/test")
 def test():
