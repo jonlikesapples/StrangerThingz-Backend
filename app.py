@@ -80,7 +80,7 @@ def nothing():
 @app.route("/test")
 def test():
 	now = datetime.datetime.now()
-	return str(now) + "<br> this endpoint exists solely for testing"
+	return "THIS IS A LETTER"
 
 @app.route("/jsontest")
 def jsontest():
