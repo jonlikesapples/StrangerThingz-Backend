@@ -75,12 +75,20 @@ def nothing():
 	/authpost?email=EMAIL@DOMAIN.COM&password=PASSWORD <br>\
 	/authlogin?email=EMAIL@DOMAIN.COM&password=PASSWORD <br> \
 	/authresetpassword?email=EMAIL@DOMAIN.COM <br> \
-	last commit: 4/25/2018"
+	last commit: 4/26/2018 4:01pm"
 
 @app.route("/test")
 def test():
 	now = datetime.datetime.now()
 	return str(now) + "<br> this endpoint exists solely for testing"
+
+@app.route("/jsontest")
+def jsontest():
+	returnme = {
+	"username": "hi",
+	"password": "password"
+	}
+	return json.loads(json.dumps(returnme));
 
 #DOESN'T WORK PROPERLY
 @app.route("/authpost")
