@@ -88,7 +88,7 @@ def jsontest():
 	"username": "hi",
 	"password": "password"
 	}
-	return json.loads(json.dumps(returnme));
+	return json.dumps(returnme);
 
 #DOESN'T WORK PROPERLY
 @app.route("/authpost")
