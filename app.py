@@ -75,7 +75,7 @@ def nothing():
 	/authpost?email=EMAIL@DOMAIN.COM&password=PASSWORD <br>\
 	/authlogin?email=EMAIL@DOMAIN.COM&password=PASSWORD <br> \
 	/authresetpassword?email=EMAIL@DOMAIN.COM <br> \
-	last commit: 4/26/2018 4:01pm"
+	last commit: 4/26/2018 4:01pm TEST COMMIT.";
 
 @app.route("/testy/<username>")
 def testy(username):
