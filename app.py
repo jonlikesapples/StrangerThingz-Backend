@@ -77,6 +77,10 @@ def nothing():
 	/authresetpassword?email=EMAIL@DOMAIN.COM <br> \
 	last commit: 4/26/2018 4:01pm"
 
+@app.route("/testy/<username>")
+def testy(username):
+	return "hi" + username;
+
 @app.route("/test")
 def test():
 	now = datetime.datetime.now()
