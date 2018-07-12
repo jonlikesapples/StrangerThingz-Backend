@@ -1,9 +1,14 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, session
+from flask_session import Session
 import os
 import json
 import pyrebase
 import hashlib
 import datetime
+import random
+import googlemaps
+from twilio.rest import Client
+#from . import app
 #https://github.com/thisbejim/Pyrebase
 '''
 git add .
@@ -14,14 +19,18 @@ https://strangerthingz-backend.herokuapp.com
 app = Flask(__name__)
 
 
-#####################################[DON'T TOUCH] FIREBASE CONFIG #############################################
 config = {
   "apiKey": "AIzaSyAb0csAFZDQoYIJrflFTuYAwx7rS1t3oYg",
   "authDomain": "stranger-things-ce12a.firebaseapp.com",
   "databaseURL": "https://stranger-things-ce12a.firebaseio.com/",
   "storageBucket": "stranger-things-ce12a.appspot.com",
 }
-################################################################################################################
+
+
+googleMapsServerKey = "AIzaSyBS9klTUHg2RvEJb42HABeCwS9N9XYV19k"
+googleMapsBrowserKey = "AIzaSyAb0csAFZDQoYIJrflFTuYAwx7rS1t3oYg"
+
+
 
 '''
 TODO: 
@@ -29,9 +38,7 @@ delete one individual account, based on username
 '''
 
 firebase = pyrebase.initialize_app(config)
-
 db = firebase.database()
-
 auth = firebase.auth();
 
 def getcount():
@@ -64,6 +71,31 @@ def sha256encrypt(hash_string):
     encryptedPassword = hashlib.sha256(hash_string.encode()).hexdigest()
     return encryptedPassword	
 
+#TWILIO [unused]
+def generate_code():
+    return str(random.randrange(100000, 999999))
+
+#TWILIO [unused]
+def send_confirmation_code(to_number):
+    verification_code = generate_code()
+    send_sms(to_number, verification_code)
+    # session['verification_code'] = verification_code
+    # return verification_code
+
+#TWILIO [unused]
+def send_sms(to_number, body):
+	twilio_number = "+14157924667"
+	twilio_account_sid = "AC9bcb44df300ed77aa2872e0558cb883f"
+	twilio_auth_token = "54fd155a3b094c96b3bb192e755123e6"
+	#account_sid = app.config[twilio_account_sid]
+	#auth_token = app.config[twilio_auth_token]
+	#twilio_number = app.config[TWILIO_NUMBER]
+	client = Client(twilio_account_sid, twilio_auth_token)
+	client.api.messages.create(to_number,
+                           from_=twilio_number,
+                           body=body)
+
+
 #get from firebase server.
 @app.route("/")
 def nothing():
@@ -75,7 +107,25 @@ def nothing():
 	/authpost?email=EMAIL@DOMAIN.COM&password=PASSWORD <br>\
 	/authlogin?email=EMAIL@DOMAIN.COM&password=PASSWORD <br> \
 	/authresetpassword?email=EMAIL@DOMAIN.COM <br> \
-	last commit: 4/26/2018 4:01pm TEST COMMIT.";
+	last commit: 4/26/2018 4:01pm";
+
+@app.route("/geodirections")
+def geolocation():
+	start = str(request.args.get('start'));
+	end = str(request.args.get('end'));
+	print(start);
+	print(end);
+	gmaps = googlemaps.Client(key=googleMapsServerKey);
+	return json.dumps(gmaps.distance_matrix(start,
+						  end,
+						  'driving',
+						  'imperial'));
+
+#TWILIO UNUSED
+@app.route("/twiliotest")
+def twiliotest():
+	send_confirmation_code("+14156890289")
+	return "hi"
 
 @app.route("/testy/<username>")
 def testy(username):
@@ -94,16 +144,18 @@ def jsontest():
 	}
 	return json.dumps(returnme);
 
-#DOESN'T WORK PROPERLY
+#works properly: password needs to be at least 8 characters long
+#error handling works in front-end
 @app.route("/authpost")
 def specialpost():
-	email = str(request.args.get('email'));
-	#password = sha256encrypt(str(request.args.get('password')));
+	email = str(request.args.get('email')); #gets email parameter from link ?email=EMAIL&
+	print(request.args.get('email')); 
+	#password = sha256encrypt(str(request.args.get('password')));	
+	#password encryption in front end?
 	password = str(request.args.get('password'));
 	user = auth.create_user_with_email_and_password(email, password);
 
 	now = datetime.datetime.now()
-
 	data = {
 	"dateCreated": str(now),
 	"importantinfo": "this is the entry for: " + email
@@ -116,7 +168,6 @@ def specialpost():
 @app.route("/authlogin")
 def speciallogin():
 	email = str(request.args.get('email'));
-	#password = sha256encrypt(str(request.args.get('password')));
 	password = str(request.args.get('password'));	
 	user = auth.sign_in_with_email_and_password(email, password);
 	localid = str(user['localId']);
@@ -176,7 +227,11 @@ def delete():
 #######################################[DON'T TOUCH] Serverside stuff to connect to Heroku #######################################
 ##################################################################################################################################
 if __name__ == '__main__':
-    from os import environ;
-    app.run(debug=True, host='0.0.0.0', port=int(environ.get("PORT", 5000)));
+	app.secret_key = 'super secret key'
+	app.config['SESSION_TYPE'] = 'filesystem'
+	sess.init_app(app)
+	app.debug = True
+	from os import environ;
+	app.run(debug=True, host='0.0.0.0', port=int(environ.get("PORT", 5000)));
 
     
