@@ -99,7 +99,7 @@ def send_sms(to_number, body):
 #get from firebase server.
 @app.route("/")
 def nothing():
-	return "Welcome to the Stranger Thingz backend, powered by Flask. <br> \
+	return """Welcome to the Stranger Thingz backend, powered by Flask. <br> \
 	Created for CMPE195A-Senior Project at SJSU for Fall 2018 - Spring 2019. <br> \
 	Authors: Gwyneth Mina, Christopher Navy, Brendan Hui, and Jonathan Wong. <br> <br> \
 	possible endpoints: <br>\
@@ -108,7 +108,7 @@ def nothing():
 	/authlogin?email=EMAIL@DOMAIN.COM&password=PASSWORD <br> \
 	/authresetpassword?email=EMAIL@DOMAIN.COM <br> \
 	/geodirections?start=START&end=END <br> \
-	last commit: 7/12/2018";
+	last commit: 7/12/2018""";
 
 @app.route("/geodirections")
 def geolocation():
