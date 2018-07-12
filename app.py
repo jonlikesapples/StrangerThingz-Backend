@@ -107,20 +107,23 @@ def nothing():
 	/authpost?email=EMAIL@DOMAIN.COM&password=PASSWORD <br>\
 	/authlogin?email=EMAIL@DOMAIN.COM&password=PASSWORD <br> \
 	/authresetpassword?email=EMAIL@DOMAIN.COM <br> \
-	/geodirections?start=START&end=END <br> \
+	/geodirections?start=START&end=END (params: literal location: "San Francisco, California" or coordinates: '37.4215420,-122.0840110') <br> \
 	last commit: 7/12/2018""";
 
 @app.route("/geodirections")
 def geolocation():
-	start = str(request.args.get('start'));
+	start = str(request.args.get('start')); 
 	end = str(request.args.get('end'));
+	#start = "37.3324980,-122.0289780";
+	#end = "37.4215420,-122.0840110";
 	print(start);
 	print(end);
 	gmaps = Client(key=googleMapsServerKey);
-	return json.dumps(gmaps.distance_matrix(start,
-						  end,
-						  'driving',
-						  'imperial'));
+	return json.dumps(gmaps.distance_matrix(
+						start,
+						end,
+						'driving',
+						'imperial'));
 
 #TWILIO UNUSED
 @app.route("/twiliotest")
