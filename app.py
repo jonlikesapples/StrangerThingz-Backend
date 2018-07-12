@@ -6,8 +6,8 @@ import pyrebase
 import hashlib
 import datetime
 import random
-import googlemaps
-from twilio.rest import Client
+from googlemaps import Client
+#from twilio.rest import Client
 #from . import app
 #https://github.com/thisbejim/Pyrebase
 '''
@@ -116,7 +116,7 @@ def geolocation():
 	end = str(request.args.get('end'));
 	print(start);
 	print(end);
-	gmaps = googlemaps.Client(key=googleMapsServerKey);
+	gmaps = Client(key=googleMapsServerKey);
 	return json.dumps(gmaps.distance_matrix(start,
 						  end,
 						  'driving',
