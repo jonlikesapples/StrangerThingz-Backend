@@ -107,7 +107,8 @@ def nothing():
 	/authpost?email=EMAIL@DOMAIN.COM&password=PASSWORD <br>\
 	/authlogin?email=EMAIL@DOMAIN.COM&password=PASSWORD <br> \
 	/authresetpassword?email=EMAIL@DOMAIN.COM <br> \
-	last commit: 4/26/2018 4:01pm";
+	/geodirections?start=START&end=END <br> \
+	last commit: 7/12/2018";
 
 @app.route("/geodirections")
 def geolocation():
