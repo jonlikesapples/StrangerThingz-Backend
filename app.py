@@ -230,7 +230,7 @@ def delete():
 if __name__ == '__main__':
 	app.secret_key = 'super secret key'
 	app.config['SESSION_TYPE'] = 'filesystem'
-	sess.init_app(app)
+	#sess.init_app(app)
 	app.debug = True
 	from os import environ;
 	app.run(debug=True, host='0.0.0.0', port=int(environ.get("PORT", 5000)));
