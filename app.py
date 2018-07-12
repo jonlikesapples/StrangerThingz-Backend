@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, request, session
-from flask_session import Session
+#from flask.ext.session import Session
 import os
 import json
 import pyrebase
