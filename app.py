@@ -17,7 +17,7 @@ git push heroku master
 https://strangerthingz-backend.herokuapp.com
 
 pip freeze > requirements.txt
-pip install -r requirements.txt
+pip install -r requirements.txt 
 '''
 
 app = Flask(__name__)
