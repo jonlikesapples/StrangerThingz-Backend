@@ -15,7 +15,11 @@ git add .
 git commit -m "commit message"
 git push heroku master
 https://strangerthingz-backend.herokuapp.com
+
+pip freeze > requirements.txt
+pip install -r requirements.txt
 '''
+
 app = Flask(__name__)
 
 
@@ -138,7 +142,7 @@ def testy(username):
 @app.route("/test")
 def test():
 	now = datetime.datetime.now()
-	return "THIS IS A LETTER"
+	return "this is the test endpoint"
 
 @app.route("/jsontest")
 def jsontest():
