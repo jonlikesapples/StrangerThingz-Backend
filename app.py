@@ -150,7 +150,7 @@ def jsontest():
 	"username": "hi",
 	"password": "password"
 	}
-	return json.dumps(returnme);
+	return jsonify(returnme);
 
 #works properly: password needs to be at least 8 characters long
 #error handling works in front-end
