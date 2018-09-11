@@ -129,6 +129,30 @@ def geolocation():
 						'driving',
 						'imperial'));
 
+@app.route("/authpost")
+def whatoiajsdioasd():
+	email = "123@test.com"
+	password = "password"
+	postid = str(request.args.get("postid"));
+	user = auth.sign_in_with_email_and_password(email, password);
+	localid = str(user['localId']);
+	#create a 'posts' array
+	#everytime this gets called, appends to 'posts' json array
+	#posts see brendens schema
+	#DO THIS
+	#return some sort of confirmation that it was posted, not al
+	return carname;
+
+def getallpostfromuser(localid):
+	#return all posts with that localid
+	#return in json
+
+
+def getpostsfromcloseusers(lat1,long1,lat2,long2, distance)
+	#using /geodirections endpoints
+	#get all users within (distance) km. if less than distance, return, else dont return
+
+		
 #TWILIO UNUSED
 @app.route("/twiliotest")
 def twiliotest():
