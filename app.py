@@ -6,6 +6,7 @@ import pyrebase
 import hashlib
 import datetime
 import random
+import requests
 from googlemaps import Client
 #from twilio.rest import Client
 #from . import app
@@ -150,12 +151,17 @@ def authnewsfeeeeeed():
 	#posts see brendens schema
 	#DO THIS
 	#return some sort of confirmation that it was posted, not al
-	return json.dumps(data_entry,date1);
+	return date1;
 
-#@app.route("/allnewsfeed", methods=['GET'])
-#def getallpostfromuser(localid):
+@app.route("/allnewsfeed", methods=['GET'])
+def getallpostfromuser(localid):
 	#return all posts with that localid
 	#return in json
+    data = {"user": "localid", "date1":}
+
+    return jsonify(data);
+
+
 
 
 #brenden
