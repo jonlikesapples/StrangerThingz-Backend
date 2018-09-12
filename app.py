@@ -75,29 +75,29 @@ def sha256encrypt(hash_string):
     encryptedPassword = hashlib.sha256(hash_string.encode()).hexdigest()
     return encryptedPassword	
 
-#TWILIO [unused]
-def generate_code():
-    return str(random.randrange(100000, 999999))
+# #TWILIO [unused]
+# def generate_code():
+#     return str(random.randrange(100000, 999999))
 
-#TWILIO [unused]
-def send_confirmation_code(to_number):
-    verification_code = generate_code()
-    send_sms(to_number, verification_code)
-    # session['verification_code'] = verification_code
-    # return verification_code
+# #TWILIO [unused]
+# def send_confirmation_code(to_number):
+#     verification_code = generate_code()
+#     send_sms(to_number, verification_code)
+#     # session['verification_code'] = verification_code
+#     # return verification_code
 
-#TWILIO [unused]
-def send_sms(to_number, body):
-	twilio_number = "+14157924667"
-	twilio_account_sid = "AC9bcb44df300ed77aa2872e0558cb883f"
-	twilio_auth_token = "54fd155a3b094c96b3bb192e755123e6"
-	#account_sid = app.config[twilio_account_sid]
-	#auth_token = app.config[twilio_auth_token]
-	#twilio_number = app.config[TWILIO_NUMBER]
-	client = Client(twilio_account_sid, twilio_auth_token)
-	client.api.messages.create(to_number,
-                           from_=twilio_number,
-                           body=body)
+# #TWILIO [unused]
+# def send_sms(to_number, body):
+# 	twilio_number = "+14157924667"
+# 	twilio_account_sid = "AC9bcb44df300ed77aa2872e0558cb883f"
+# 	twilio_auth_token = "54fd155a3b094c96b3bb192e755123e6"
+# 	#account_sid = app.config[twilio_account_sid]
+# 	#auth_token = app.config[twilio_auth_token]
+# 	#twilio_number = app.config[TWILIO_NUMBER]
+# 	client = Client(twilio_account_sid, twilio_auth_token)
+# 	client.api.messages.create(to_number,
+#                            from_=twilio_number,
+#                            body=body)
 
 
 #get from firebase server.
@@ -112,6 +112,7 @@ def nothing():
 	/authlogin?email=EMAIL@DOMAIN.COM&password=PASSWORD <br> \
 	/authresetpassword?email=EMAIL@DOMAIN.COM <br> \
 	/geodirections?start=START&end=END (params: literal location: "San Francisco, California" or coordinates: '37.4215420,-122.0840110') <br> \
+	/authnewsfeed?email=EMAIL@DOMAIN.COM&password=PASSWORD <br>\
 	last commit: 7/12/2018""";
 
 @app.route("/geodirections")
@@ -129,35 +130,45 @@ def geolocation():
 						'driving',
 						'imperial'));
 
-@app.route("/authpost")
-def whatoiajsdioasd():
+@app.route("/authnewsfeed")
+def authnewsfeeeeeed():
 	email = "123@test.com"
 	password = "password"
 	postid = str(request.args.get("postid"));
 	user = auth.sign_in_with_email_and_password(email, password);
 	localid = str(user['localId']);
+	date_entry = str('Enter a date in YYYY-MM-DD format:');
+	print(date_entry);
+	year, month, day = map(int, date_entry.split('-'));
+	date1 = date(year, month, day);
+	#postLocation
+	#postSubject
+	#postTime
 	#create a 'posts' array
+	#postID, postDate, postLocation, postSubject, postTime
 	#everytime this gets called, appends to 'posts' json array
 	#posts see brendens schema
 	#DO THIS
 	#return some sort of confirmation that it was posted, not al
-	return carname;
+	return json.dumps(data_entry,date1);
 
-def getallpostfromuser(localid):
+#@app.route("/allnewsfeed", methods=['GET'])
+#def getallpostfromuser(localid):
 	#return all posts with that localid
 	#return in json
 
 
-def getpostsfromcloseusers(lat1,long1,lat2,long2, distance)
+#brenden
+#def getpostsfromcloseusers(lat1,long1,lat2,long2, distance)
 	#using /geodirections endpoints
 	#get all users within (distance) km. if less than distance, return, else dont return
 
-		
-#TWILIO UNUSED
-@app.route("/twiliotest")
-def twiliotest():
-	send_confirmation_code("+14156890289")
-	return "hi"
+
+# #TWILIO UNUSED
+# @app.route("/twiliotest")
+# def twiliotest():
+# 	send_confirmation_code("+14156890289")
+# 	return "hi"
 
 @app.route("/testy/<username>")
 def testy(username):
@@ -235,7 +246,6 @@ def redirect():
 	usernameValue = str(request.args.get('username'));
 	passwordValue = sha256encrypt(str(request.args.get('password')));
 	
-
 	postedvalue = {"username": usernameValue,
 				   "password": passwordValue,
 				   "info": "this is info of " + usernameValue}
