@@ -1,6 +1,0 @@
-APIKEY = "AIzaSyAb0csAFZDQoYIJrflFTuYAwx7rS1t3oYg"
-AUTHDOMAIN = "stranger-things-ce12a.firebaseapp.com"
-DATABASEURL = "https://stranger-things-ce12a.firebaseio.com/"
-STORAGEBUCKET =  "stranger-things-ce12a.appspot.com"
-GOOGLEMAPSSERVERKEY = "AIzaSyBS9klTUHg2RvEJb42HABeCwS9N9XYV19k"
-GOOGLEMAPSBROWSERKEY =  "AIzaSyAb0csAFZDQoYIJrflFTuYAwx7rS1t3oY"
