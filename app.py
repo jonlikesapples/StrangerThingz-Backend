@@ -113,7 +113,8 @@ def nothing():
 	/authlogin?email=EMAIL@DOMAIN.COM&password=PASSWORD <br> \
 	/authresetpassword?email=EMAIL@DOMAIN.COM <br> \
 	/geodirections?start=START&end=END (params: literal location: "San Francisco, California" or coordinates: '37.4215420,-122.0840110') <br> \
-	/authnewsfeed?email=EMAIL@DOMAIN.COM&password=PASSWORD <br>\
+	/authnewsfeed <br> \
+	/allnewsfeed <br> \
 	last commit: 7/12/2018""";
 
 @app.route("/geodirections")
@@ -154,13 +155,12 @@ def authnewsfeeeeeed():
 	return date1;
 
 @app.route("/allnewsfeed")
-def getallpostfromuser(localid):
+def getallpostfromuser():
+#def getallpostfromuser(localid):
 	#return all posts with that localid
 	#return in json
 	newsfeed_result = ""
-	 dbresult = db.child("users").get(localid) #type orderedDict
-	 for user in dbresult.each(): 
-		newsfeed_result += "key: " + str(user.key()) + " " + "val: " + str(user.val()) + "<br>"
+	
 	return newsfeed_result;
    
 
