@@ -153,13 +153,16 @@ def authnewsfeeeeeed():
 	#return some sort of confirmation that it was posted, not al
 	return date1;
 
-@app.route("/allnewsfeed", methods=['GET'])
+@app.route("/allnewsfeed")
 def getallpostfromuser(localid):
 	#return all posts with that localid
 	#return in json
-    data = {"user": "localid", "date1":}
-
-    return jsonify(data);
+	newsfeed_result = ""
+	 dbresult = db.child("users").get(localid) #type orderedDict
+	 for user in dbresult.each(): 
+		newsfeed_result += "key: " + str(user.key()) + " " + "val: " + str(user.val()) + "<br>"
+	return newsfeed_result;
+   
 
 
 
