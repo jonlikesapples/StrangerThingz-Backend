@@ -23,7 +23,7 @@ pip install -r requirements.txt
 app = Flask(__name__)
 
 
-herokuConfig = {
+config = {
 	"apiKey" : os.environ["API_KEY"],
 	"authDomain:" : os.environ["AUTH_DOMAIN"],
 	"databaseURL" : os.environ["DATABASE_URL"],
@@ -41,7 +41,7 @@ googleMapsBrowserKey = os.environ["GOOGLEMAPS_BROWSER_KEY"];
 # googleMapsServerKey = GOOGLEMAPSSERVERKEY
 # googleMapsBrowserKey = GOOGLEMAPSBROWSERKEY
 
-firebase = pyrebase.initialize_app(herokuConfig)
+firebase = pyrebase.initialize_app(config)
 #firebase = pyrebase.initialize_app(config)
 db = firebase.database()
 auth = firebase.auth();
