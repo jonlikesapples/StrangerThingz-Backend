@@ -24,12 +24,11 @@ app = Flask(__name__)
 
 
 herokuConfig = {
-	"apiKey": os.environ["API_KEY"],
-	"authDomain:": os.environ["AUTH_DOMAIN"],
-	"databaseURL": os.environ["DATABASE_URL"],
-	"storageBucket": os.environ["STORAGE_BUCKET"],
+	"apiKey" : os.environ["API_KEY"],
+	"authDomain:" : os.environ["AUTH_DOMAIN"],
+	"databaseURL" : os.environ["DATABASE_URL"],
+	"storageBucket" : os.environ["STORAGE_BUCKET"],
 }
-
 googleMapsServerKey = os.environ["GOOGLEMAPS_SERVER_KEY"];
 googleMapsBrowserKey = os.environ["GOOGLEMAPS_BROWSER_KEY"];
 
@@ -39,8 +38,6 @@ googleMapsBrowserKey = os.environ["GOOGLEMAPS_BROWSER_KEY"];
 #   "databaseURL": DATABASEURL,
 #   "storageBucket": STORAGEBUCKET,
 # }
-
-
 # googleMapsServerKey = GOOGLEMAPSSERVERKEY
 # googleMapsBrowserKey = GOOGLEMAPSBROWSERKEY
 
