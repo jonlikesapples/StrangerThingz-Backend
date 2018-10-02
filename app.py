@@ -139,20 +139,26 @@ def authnewsfeeeeeed():
 	postid = str(request.args.get("postid"));
 	user = auth.sign_in_with_email_and_password(email, password);
 	localid = str(user['localId']);
-	date_entry = str('Enter a date in YYYY-MM-DD format:');
-	print(date_entry);
-	year, month, day = map(int, date_entry.split('-'));
-	date1 = date(year, month, day);
+	date_entry = input('Enter a date (i.e. 2017-7-1)')
+	year, month, day = map(int, date_entry.split('-'))
+	date = datetime(year, month, day)
 	#postLocation
 	#postSubject
 	#postTime
 	#create a 'posts' array
 	#postID, postDate, postLocation, postSubject, postTime
+
+	# with open(DATA_FILENAME, mode='w', encoding='utf-8') as f:
+ #    json.dump([], f)
+ #    with open(DATA_FILENAME, mode='w', encoding='utf-8') as feedsjson:
+ #    entry = {'user': args.localid, 'date': args.date}
+ #    feeds.append(entry)
+ #    json.dump(feeds, feedsjson)
 	#everytime this gets called, appends to 'posts' json array
 	#posts see brendens schema
 	#DO THIS
 	#return some sort of confirmation that it was posted, not al
-	return date1;
+	#return date1;
 
 @app.route("/allnewsfeed")
 def getallpostfromuser():
@@ -160,10 +166,9 @@ def getallpostfromuser():
 	#return all posts with that localid
 	#return in json
 	newsfeed_result = ""
-	
+
 	return newsfeed_result;
    
-
 
 
 
