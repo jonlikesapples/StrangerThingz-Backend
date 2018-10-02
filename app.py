@@ -134,43 +134,40 @@ def geolocation():
 
 @app.route("/authnewsfeed")
 def authnewsfeeeeeed():
-	email = "123@test.com"
-	password = "password"
-	postid = str(request.args.get("postid"));
-	user = auth.sign_in_with_email_and_password(email, password);
-	localid = str(user['localId']);
-	date_entry = input('Enter a date (i.e. 2017-7-1)')
-	year, month, day = map(int, date_entry.split('-'))
-	date = datetime(year, month, day)
-	#postLocation
-	#postSubject
-	#postTime
+    email = "123@test.com"
+    password = "password"
+    postid = str(request.args.get("postid"));
+    user = auth.sign_in_with_email_and_password(email, password);
+    localid = str(user['localId']);
+    postSubject = str(request.args.get("postSubject"))
+    postLocation = str(request.args.get("postLocation"))
+    postWhen = str(request.args.get("postWhen"));
+    data = {"user": user,
+    		   "info": "this is info of " + user,
+    		   "postSubject": postSubject,
+    		   "postLocation": postLocation,
+    		   "postWhen": postWhen};
+
+    
+    return json.dumps(data);
 	#create a 'posts' array
 	#postID, postDate, postLocation, postSubject, postTime
-
-	# with open(DATA_FILENAME, mode='w', encoding='utf-8') as f:
- #    json.dump([], f)
- #    with open(DATA_FILENAME, mode='w', encoding='utf-8') as feedsjson:
- #    entry = {'user': args.localid, 'date': args.date}
- #    feeds.append(entry)
- #    json.dump(feeds, feedsjson)
+    
+	#user input to record the log
+    
 	#everytime this gets called, appends to 'posts' json array
 	#posts see brendens schema
 	#DO THIS
 	#return some sort of confirmation that it was posted, not al
-	#return date1;
 
 @app.route("/allnewsfeed")
 def getallpostfromuser():
 #def getallpostfromuser(localid):
 	#return all posts with that localid
 	#return in json
-	newsfeed_result = ""
-
-	return newsfeed_result;
+    
+	return getallpostfromuser;
    
-
-
 
 #brenden
 #def getpostsfromcloseusers(lat1,long1,lat2,long2, distance)
