@@ -24,13 +24,13 @@ app = Flask(__name__)
 
 
 config = {
-	"apiKey" : os.environ["API_KEY"],
-	"authDomain:" : os.environ["AUTH_DOMAIN"],
-	"databaseURL" : os.environ["DATABASE_URL"],
-	"storageBucket" : os.environ["STORAGE_BUCKET"],
+	"apiKey" : "AIzaSyAb0csAFZDQoYIJrflFTuYAwx7rS1t3oYg",
+	"authDomain:" : "stranger-things-ce12a.firebaseapp.com",
+	"databaseURL" : "https://stranger-things-ce12a.firebaseio.com/",
+	"storageBucket" :  "stranger-things-ce12a.appspot.com",
 }
-googleMapsServerKey = os.environ["GOOGLEMAPS_SERVER_KEY"];
-googleMapsBrowserKey = os.environ["GOOGLEMAPS_BROWSER_KEY"];
+googleMapsServerKey = "AIzaSyBS9klTUHg2RvEJb42HABeCwS9N9XYV19k"
+googleMapsBrowserKey = "AIzaSyAb0csAFZDQoYIJrflFTuYAwx7rS1t3oY"
 
 # config = {
 #   "apiKey": APIKEY,
