@@ -17,7 +17,7 @@ git push heroku master
 https://strangerthingz-backend.herokuapp.com
 
 pip freeze > requirements.txt
-pip install -r requirements.txt 
+pip install -r requirements.txt
 '''
 
 app = Flask(__name__)
@@ -37,7 +37,7 @@ googleMapsBrowserKey = "AIzaSyAb0csAFZDQoYIJrflFTuYAwx7rS1t3oYg"
 
 
 '''
-TODO: 
+TODO:
 delete one individual account, based on username
 '''
 
@@ -49,7 +49,7 @@ def getcount():
 	dbresult = db.child("totalnumofusers").get()
 	QUERY_RESULT = ""
 	getcount = 123
-	for user in dbresult.each(): 
+	for user in dbresult.each():
 		QUERY_RESULT += "key: " + str(user.key()) + " " + "val: " + str(user.val()) + "<br>"
 		getcount = user.val()
 	return str(getcount);
@@ -58,14 +58,14 @@ def inccount():
 	dbresult = db.child("totalnumofusers").get()
 	QUERY_RESULT = ""
 	newcount = 123
-	for user in dbresult.each(): 
+	for user in dbresult.each():
 		QUERY_RESULT += "key: " + str(user.key()) + " " + "val: " + str(user.val()) + "<br>"
 		newcount = user.val() + 1;
 		break;
 
 	addcount = {"count": newcount }
 	dbresult = db.child("totalnumofusers").update(addcount);
-	
+
 def resetcount():
 	dbresult = db.child("totalnumofusers").get()
 	resettedcount = {"count": 1}
@@ -73,32 +73,7 @@ def resetcount():
 
 def sha256encrypt(hash_string):
     encryptedPassword = hashlib.sha256(hash_string.encode()).hexdigest()
-    return encryptedPassword	
-
-#TWILIO [unused]
-def generate_code():
-    return str(random.randrange(100000, 999999))
-
-#TWILIO [unused]
-def send_confirmation_code(to_number):
-    verification_code = generate_code()
-    send_sms(to_number, verification_code)
-    # session['verification_code'] = verification_code
-    # return verification_code
-
-#TWILIO [unused]
-def send_sms(to_number, body):
-	twilio_number = "+14157924667"
-	twilio_account_sid = "AC9bcb44df300ed77aa2872e0558cb883f"
-	twilio_auth_token = "54fd155a3b094c96b3bb192e755123e6"
-	#account_sid = app.config[twilio_account_sid]
-	#auth_token = app.config[twilio_auth_token]
-	#twilio_number = app.config[TWILIO_NUMBER]
-	client = Client(twilio_account_sid, twilio_auth_token)
-	client.api.messages.create(to_number,
-                           from_=twilio_number,
-                           body=body)
-
+    return encryptedPassword
 
 #get from firebase server.
 @app.route("/")
@@ -116,7 +91,7 @@ def nothing():
 
 @app.route("/geodirections")
 def geolocation():
-	start = str(request.args.get('start')); 
+	start = str(request.args.get('start'));
 	end = str(request.args.get('end'));
 	#start = "37.3324980,-122.0289780";
 	#end = "37.4215420,-122.0840110";
@@ -128,16 +103,6 @@ def geolocation():
 						end,
 						'driving',
 						'imperial'));
-
-#TWILIO UNUSED
-@app.route("/twiliotest")
-def twiliotest():
-	send_confirmation_code("+14156890289")
-	return "hi"
-
-@app.route("/testy/<username>")
-def testy(username):
-	return "hi" + username;
 
 @app.route("/test")
 def test():
@@ -154,11 +119,11 @@ def jsontest():
 
 #works properly: password needs to be at least 8 characters long
 #error handling works in front-end
-@app.route("/authpost")
+@app.route("/authcreateuser")
 def specialpost():
 	email = str(request.args.get('email')); #gets email parameter from link ?email=EMAIL&
-	print(request.args.get('email')); 
-	#password = sha256encrypt(str(request.args.get('password')));	
+	print(request.args.get('email'));
+	#password = sha256encrypt(str(request.args.get('password')));
 	#password encryption in front end?
 	password = str(request.args.get('password'));
 	user = auth.create_user_with_email_and_password(email, password);
@@ -168,7 +133,6 @@ def specialpost():
 	"dateCreated": str(now),
 	"importantinfo": "this is the entry for: " + email
 		}
-
 	results = db.child("users").child(user['localId']).set(data)
 	return "posted <br> \
 	" + json.dumps(auth.get_account_info(user['idToken']));
@@ -176,11 +140,12 @@ def specialpost():
 @app.route("/authlogin")
 def speciallogin():
 	email = str(request.args.get('email'));
-	password = str(request.args.get('password'));	
+	password = str(request.args.get('password'));
 	user = auth.sign_in_with_email_and_password(email, password);
-	localid = str(user['localId']);
-	info = db.child("users").child(localid).get().val();
-	return json.dumps(info);
+	return str(user['localId']);
+	# localid = str(user['localId']);
+	# info = db.child("users").child(localid).get().val();
+	# return json.dumps(info);
 
 @app.route("/authresetpassword")
 def resetpassword():
@@ -195,7 +160,7 @@ def get():
 	# stringdata = json.dumps(data) #type string, no real use for this
 	QUERY_RESULT = ""
 	dbresult = db.child("users").get() #type orderedDict
-	for user in dbresult.each(): 
+	for user in dbresult.each():
 		QUERY_RESULT += "key: " + str(user.key()) + " " + "val: " + str(user.val()) + "<br>"
 	return QUERY_RESULT;
 
@@ -210,7 +175,7 @@ def redirect():
 	return "don't use this endpoint."
 	usernameValue = str(request.args.get('username'));
 	passwordValue = sha256encrypt(str(request.args.get('password')));
-	
+
 
 	postedvalue = {"username": usernameValue,
 				   "password": passwordValue,
@@ -241,5 +206,3 @@ if __name__ == '__main__':
 	app.debug = True
 	from os import environ;
 	app.run(debug=True, host='0.0.0.0', port=int(environ.get("PORT", 5000)));
-
-    
