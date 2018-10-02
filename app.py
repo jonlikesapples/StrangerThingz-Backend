@@ -7,7 +7,7 @@ import hashlib
 import datetime
 import random
 from googlemaps import Client
-#from twilio.rest import Client
+from config import *
 #from . import app
 #https://github.com/thisbejim/Pyrebase
 '''
@@ -24,22 +24,16 @@ app = Flask(__name__)
 
 
 config = {
-  "apiKey": "AIzaSyAb0csAFZDQoYIJrflFTuYAwx7rS1t3oYg",
-  "authDomain": "stranger-things-ce12a.firebaseapp.com",
-  "databaseURL": "https://stranger-things-ce12a.firebaseio.com/",
-  "storageBucket": "stranger-things-ce12a.appspot.com",
+  "apiKey": APIKEY,
+  "authDomain": AUTHDOMAIN,
+  "databaseURL": DATABASEURL,
+  "storageBucket": STORAGEBUCKET,
 }
 
 
-googleMapsServerKey = "AIzaSyBS9klTUHg2RvEJb42HABeCwS9N9XYV19k"
-googleMapsBrowserKey = "AIzaSyAb0csAFZDQoYIJrflFTuYAwx7rS1t3oYg"
+googleMapsServerKey = GOOGLEMAPSSERVERKEY
+googleMapsBrowserKey = GOOGLEMAPSBROWSERKEY
 
-
-
-'''
-TODO:
-delete one individual account, based on username
-'''
 
 firebase = pyrebase.initialize_app(config)
 db = firebase.database()
@@ -82,7 +76,7 @@ def nothing():
 	Authors: Gwyneth Mina, Christopher Navy, Brendan Hui, and Jonathan Wong. <br> <br> \
 	possible endpoints: <br>\
 	/allusers <br> \
-	/authpost?email=EMAIL@DOMAIN.COM&password=PASSWORD <br>\
+	/authcreateuser?email=EMAIL@DOMAIN.COM&password=PASSWORD <br>\
 	/authlogin?email=EMAIL@DOMAIN.COM&password=PASSWORD <br> \
 	/authresetpassword?email=EMAIL@DOMAIN.COM <br> \
 	/geodirections?start=START&end=END (params: literal location: "San Francisco, California" or coordinates: '37.4215420,-122.0840110') <br> \
@@ -131,6 +125,8 @@ def specialpost():
 	return "posted <br> \
 	" + json.dumps(auth.get_account_info(user['idToken']));
 
+#foo@bar.com
+#foobar
 @app.route("/authlogin")
 def speciallogin():
 	email = str(request.args.get('email'));
