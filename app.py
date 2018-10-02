@@ -113,7 +113,7 @@ def nothing():
 	/authlogin?email=EMAIL@DOMAIN.COM&password=PASSWORD <br> \
 	/authresetpassword?email=EMAIL@DOMAIN.COM <br> \
 	/geodirections?start=START&end=END (params: literal location: "San Francisco, California" or coordinates: '37.4215420,-122.0840110') <br> \
-	/authnewsfeed <br> \
+	/authnewsfeed?email=EMAIL@DOMAIN.COM&password=PASSWORD& <br> \
 	/allnewsfeed <br> \
 	last commit: 7/12/2018""";
 
@@ -142,14 +142,14 @@ def authnewsfeeeeeed():
     postSubject = str(request.args.get("postSubject"))
     postLocation = str(request.args.get("postLocation"))
     postWhen = str(request.args.get("postWhen"));
-    data = {"user": user,
-    		   "info": "this is info of " + user,
+    data = {"user": localid,"info": "this is info of " + user,
     		   "postSubject": postSubject,
     		   "postLocation": postLocation,
     		   "postWhen": postWhen};
 
     
     return json.dumps(data);
+
 	#create a 'posts' array
 	#postID, postDate, postLocation, postSubject, postTime
     
