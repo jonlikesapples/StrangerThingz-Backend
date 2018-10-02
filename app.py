@@ -24,12 +24,15 @@ app = Flask(__name__)
 
 
 config = {
-	"apiKey": "lol",
-
+	"apiKey": os.environ["API_KEY"],
+	"authDomain:": os.environ["AUTH_DOMAIN"],
+	"databaseURL": os.environ["DATABASE_URL"],
+	"storageBucket": os.environ["STORAGE_BUCKET"],
 }
 
-googleMapsServerKey = "lol"
-googleMapsBrowserKey = "lol"
+googleMapsServerKey = os.environ["GOOGLEMAPS_SERVER_KEY"];
+googleMapsBrowserKey = os.environ["GOOGLEMAPS_BROWSER_KEY"];
+
 # config = {
 #   "apiKey": APIKEY,
 #   "authDomain": AUTHDOMAIN,
@@ -41,10 +44,9 @@ googleMapsBrowserKey = "lol"
 # googleMapsServerKey = GOOGLEMAPSSERVERKEY
 # googleMapsBrowserKey = GOOGLEMAPSBROWSERKEY
 
-
-# firebase = pyrebase.initialize_app(config)
-# db = firebase.database()
-# auth = firebase.auth();
+firebase = pyrebase.initialize_app(config)
+db = firebase.database()
+auth = firebase.auth();
 
 def getcount():
 	dbresult = db.child("totalnumofusers").get()
@@ -103,10 +105,6 @@ def geolocation():
 						end,
 						'driving',
 						'imperial'));
-
-@app.route("/herokuconfigtest")
-def herokuconfigtest():
-	return os.environ["API_KEY"];
 
 @app.route("/jsontest")
 def jsontest():
