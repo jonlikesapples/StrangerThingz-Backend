@@ -7,7 +7,7 @@ import hashlib
 import datetime
 import random
 from googlemaps import Client
-from config import *
+#from config import *
 #from . import app
 #https://github.com/thisbejim/Pyrebase
 '''
