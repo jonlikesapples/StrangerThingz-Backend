@@ -24,10 +24,10 @@ app = Flask(__name__)
 
 
 config = {
-	"apiKey" : "AIzaSyAb0csAFZDQoYIJrflFTuYAwx7rS1t3oYg",
-	"authDomain:" : "stranger-things-ce12a.firebaseapp.com",
-	"databaseURL" : "https://stranger-things-ce12a.firebaseio.com/",
-	"storageBucket" :  "stranger-things-ce12a.appspot.com",
+	'apiKey': "AIzaSyAb0csAFZDQoYIJrflFTuYAwx7rS1t3oYg",
+	'authDomain': "stranger-things-ce12a.firebaseapp.com",
+	'databaseURL' : "https://stranger-things-ce12a.firebaseio.com/",
+	'storageBucket' :  "stranger-things-ce12a.appspot.com",
 }
 googleMapsServerKey = "AIzaSyBS9klTUHg2RvEJb42HABeCwS9N9XYV19k"
 googleMapsBrowserKey = "AIzaSyAb0csAFZDQoYIJrflFTuYAwx7rS1t3oY"
@@ -42,9 +42,8 @@ googleMapsBrowserKey = "AIzaSyAb0csAFZDQoYIJrflFTuYAwx7rS1t3oY"
 # googleMapsBrowserKey = GOOGLEMAPSBROWSERKEY
 
 firebase = pyrebase.initialize_app(config)
-#firebase = pyrebase.initialize_app(config)
 db = firebase.database()
-auth = firebase.auth();
+auth = firebase.auth()
 
 def getcount():
 	dbresult = db.child("totalnumofusers").get()
