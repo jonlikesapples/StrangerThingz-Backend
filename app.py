@@ -7,7 +7,7 @@ import hashlib
 import datetime
 import random
 from googlemaps import Client
-#from config import *
+from config import *
 #from . import app
 #https://github.com/thisbejim/Pyrebase
 '''
@@ -22,15 +22,16 @@ pip install -r requirements.txt
 
 app = Flask(__name__)
 
+setCredentials();
 
 config = {
-	'apiKey': "AIzaSyAb0csAFZDQoYIJrflFTuYAwx7rS1t3oYg",
-	'authDomain': "stranger-things-ce12a.firebaseapp.com",
-	'databaseURL' : "https://stranger-things-ce12a.firebaseio.com/",
-	'storageBucket' :  "stranger-things-ce12a.appspot.com",
+	'apiKey': os.environ["API_KEY"],
+	'authDomain': os.environ["AUTH_DOMAIN"],
+	'databaseURL' : os.environ["DATABASE_URL"],
+	'storageBucket' :  os.environ["STORAGE_BUCKET"],
 }
-googleMapsServerKey = "AIzaSyBS9klTUHg2RvEJb42HABeCwS9N9XYV19k"
-googleMapsBrowserKey = "AIzaSyAb0csAFZDQoYIJrflFTuYAwx7rS1t3oY"
+googleMapsServerKey = os.environ['GOOGLEMAPS_SERVER_KEY']
+googleMapsBrowserKey = os.environ['GOOGLEMAPS_BROWSER_KEY']
 
 # config = {
 #   "apiKey": APIKEY,
