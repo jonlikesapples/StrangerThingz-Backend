@@ -1,5 +1,6 @@
-from flask import Flask, jsonify, request, session
+from flask import Flask, jsonify, request, session, render_template
 #from flask.ext.session import Session
+from flask_socketio import SocketIO
 import os
 import json
 import pyrebase
@@ -8,6 +9,7 @@ import datetime
 import random
 import requests
 from googlemaps import Client
+# from config import *
 #from twilio.rest import Client
 #from . import app
 #https://github.com/thisbejim/Pyrebase
@@ -22,7 +24,23 @@ pip install -r requirements.txt
 '''
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'vnkdjnfjknfl1232#'
+socketio = SocketIO(app)
 
+@app.route('/chat')
+def sessions():
+	return render_template('session.html')
+
+def messageReceived(methods=['GET', 'POST']):
+	print('message was received!!!')
+
+@socketio.on('my event')
+def handle_my_custom_event(json, methods=['GET', 'POST']):
+	print('received my event: ' + str(json))
+	socketio.emit('my response', json, callback=messageReceived)
+
+if __name__ == '__main__':
+	socketio.run(app, debug=True)
 
 config = {
   "apiKey": "AIzaSyAb0csAFZDQoYIJrflFTuYAwx7rS1t3oYg",
@@ -73,8 +91,8 @@ def resetcount():
 	db.child("totalnumofusers").update(resettedcount);
 
 def sha256encrypt(hash_string):
-    encryptedPassword = hashlib.sha256(hash_string.encode()).hexdigest()
-    return encryptedPassword	
+	encryptedPassword = hashlib.sha256(hash_string.encode()).hexdigest()
+	return encryptedPassword	
 
 # #TWILIO [unused]
 # def generate_code():
@@ -109,12 +127,13 @@ def nothing():
 	Authors: Gwyneth Mina, Christopher Navy, Brendan Hui, and Jonathan Wong. <br> <br> \
 	possible endpoints: <br>\
 	/allusers <br> \
-	/authpost?email=EMAIL@DOMAIN.COM&password=PASSWORD <br>\
+	/authcreateuser?email=EMAIL@DOMAIN.COM&password=PASSWORD <br>\
 	/authlogin?email=EMAIL@DOMAIN.COM&password=PASSWORD <br> \
 	/authresetpassword?email=EMAIL@DOMAIN.COM <br> \
 	/geodirections?start=START&end=END (params: literal location: "San Francisco, California" or coordinates: '37.4215420,-122.0840110') <br> \
-	/authnewsfeed?email=EMAIL@DOMAIN.COM&password=PASSWORD& <br> \
+	/authnewsfeed?email=foo@bar.com&password=foobar&postSubject=EAT&postLocation=dtsj&postWhen=tomorrowatnoon <br> \
 	/allnewsfeed <br> \
+	/chat <br> \
 	last commit: 7/12/2018""";
 
 @app.route("/geodirections")
@@ -134,40 +153,45 @@ def geolocation():
 
 @app.route("/authnewsfeed")
 def authnewsfeeeeeed():
-    email = "123@test.com"
-    password = "password"
-    postid = str(request.args.get("postid"));
-    user = auth.sign_in_with_email_and_password(email, password);
-    localid = str(user['localId']);
-    postSubject = str(request.args.get("postSubject"))
-    postLocation = str(request.args.get("postLocation"))
-    postWhen = str(request.args.get("postWhen"));
-    data = {"user": localid,"info": "this is info of " + user,
-    		   "postSubject": postSubject,
-    		   "postLocation": postLocation,
-    		   "postWhen": postWhen};
+	email = str(request.args.get('email'));
+	password = str(request.args.get('password'));
+	user = auth.sign_in_with_email_and_password(email, password)
+	#postid = str(request.args.get("postid"))
+	localid = str(user['localId']);
+	postSubject = str(request.args.get("postSubject"))
+	postLocation = str(request.args.get("postLocation"))
+	postWhen = str(request.args.get("postWhen"));
+	data = {"user": localid,"info": "this is info of " + user,
+		   "postSubject": postSubject,
+		   "postLocation": postLocation,
+		   "postWhen": postWhen};
 
-    
-    return json.dumps(data);
+	
+	return json.dumps(data);
 
 	#create a 'posts' array
 	#postID, postDate, postLocation, postSubject, postTime
-    
+	
 	#user input to record the log
-    
+	
 	#everytime this gets called, appends to 'posts' json array
 	#posts see brendens schema
 	#DO THIS
 	#return some sort of confirmation that it was posted, not al
 
-@app.route("/allnewsfeed")
+@app.route("/allnewsfeed", methods=['GET'])
 def getallpostfromuser():
 #def getallpostfromuser(localid):
 	#return all posts with that localid
 	#return in json
-    
+	
+	
 	return getallpostfromuser;
-   
+
+
+#Chat
+ 
+
 
 #brenden
 #def getpostsfromcloseusers(lat1,long1,lat2,long2, distance)
@@ -200,11 +224,11 @@ def jsontest():
 
 #works properly: password needs to be at least 8 characters long
 #error handling works in front-end
-@app.route("/authpost")
+@app.route("/authcreateuser")
 def specialpost():
 	email = str(request.args.get('email')); #gets email parameter from link ?email=EMAIL&
-	print(request.args.get('email')); 
-	#password = sha256encrypt(str(request.args.get('password')));	
+	print(request.args.get('email'));
+	#password = sha256encrypt(str(request.args.get('password')));
 	#password encryption in front end?
 	password = str(request.args.get('password'));
 	user = auth.create_user_with_email_and_password(email, password);
@@ -212,21 +236,22 @@ def specialpost():
 	now = datetime.datetime.now()
 	data = {
 	"dateCreated": str(now),
-	"importantinfo": "this is the entry for: " + email
+	"importantinfo": "this is the post for: " + email
 		}
-
 	results = db.child("users").child(user['localId']).set(data)
 	return "posted <br> \
 	" + json.dumps(auth.get_account_info(user['idToken']));
+
 
 @app.route("/authlogin")
 def speciallogin():
 	email = str(request.args.get('email'));
 	password = str(request.args.get('password'));	
 	user = auth.sign_in_with_email_and_password(email, password);
-	localid = str(user['localId']);
-	info = db.child("users").child(localid).get().val();
-	return json.dumps(info);
+	return str(user['localId']);
+	# localid = str(user['localId']);
+	# info = db.child("users").child(localid).get().val();
+	# return json.dumps(info);
 
 @app.route("/authresetpassword")
 def resetpassword():
@@ -287,4 +312,4 @@ if __name__ == '__main__':
 	from os import environ;
 	app.run(debug=True, host='0.0.0.0', port=int(environ.get("PORT", 5000)));
 
-    
+	
