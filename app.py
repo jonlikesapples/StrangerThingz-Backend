@@ -1,13 +1,19 @@
 from flask import Flask, jsonify, request, session
+import utils.responses as responses
+from utils.responses import *
+from utils.hashing import *
 #from flask.ext.session import Session
 import os
 import json
-import pyrebase
+from boto3.session import Session
+from botocore.exceptions import ClientError
+from boto3.dynamodb.conditions import Key, Attr
 import hashlib
 import datetime
 import random
 from googlemaps import Client
 from config import *
+
 #from . import app
 #https://github.com/thisbejim/Pyrebase
 '''
@@ -22,14 +28,18 @@ pip install -r requirements.txt
 
 app = Flask(__name__)
 
-setCredentials();
+# config = {
+# 	'apiKey': os.environ["API_KEY"],
+# 	'authDomain': os.environ["AUTH_DOMAIN"],
+# 	'databaseURL' : os.environ["DATABASE_URL"],
+# 	'storageBucket' :  os.environ["STORAGE_BUCKET"],
+# }
 
-config = {
-	'apiKey': os.environ["API_KEY"],
-	'authDomain': os.environ["AUTH_DOMAIN"],
-	'databaseURL' : os.environ["DATABASE_URL"],
-	'storageBucket' :  os.environ["STORAGE_BUCKET"],
-}
+session = Session(
+    aws_access_key_id=os.environ['AWS_ACCESS_KEY'],
+    aws_secret_access_key=os.environ['AWS_SECRET_KEY'],
+    region_name=os.environ['AWS_REGION_NAME']
+)
 googleMapsServerKey = os.environ['GOOGLEMAPS_SERVER_KEY']
 googleMapsBrowserKey = os.environ['GOOGLEMAPS_BROWSER_KEY']
 
@@ -42,9 +52,13 @@ googleMapsBrowserKey = os.environ['GOOGLEMAPS_BROWSER_KEY']
 # googleMapsServerKey = GOOGLEMAPSSERVERKEY
 # googleMapsBrowserKey = GOOGLEMAPSBROWSERKEY
 
-firebase = pyrebase.initialize_app(config)
-db = firebase.database()
-auth = firebase.auth()
+# firebase = pyrebase.initialize_app(config)
+# db = firebase.database()
+# auth = firebase.auth()
+
+dynamodb = session.resource('dynamodb')
+table = dynamodb.Table('195UserTable')
+
 
 def getcount():
 	dbresult = db.child("totalnumofusers").get()
@@ -66,14 +80,15 @@ def inccount():
 
 	addcount = {"count": newcount }
 	dbresult = db.child("totalnumofusers").update(addcount);
+
 def resetcount():
 	dbresult = db.child("totalnumofusers").get()
 	resettedcount = {"count": 1}
 	db.child("totalnumofusers").update(resettedcount);
 
-def sha256encrypt(hash_string):
-    encryptedPassword = hashlib.sha256(hash_string.encode()).hexdigest()
-    return encryptedPassword
+# def sha256encrypt(hash_string):
+#     encryptedPassword = hashlib.sha256(hash_string.encode()).hexdigest()
+#     return encryptedPassword
 
 #get from firebase server.
 @app.route("/")
@@ -132,6 +147,55 @@ def specialpost():
 	return "posted <br> \
 	" + json.dumps(auth.get_account_info(user['idToken']));
 
+################################################NEW STUFF NEW STUFF NEW STUFF ########################################################################
+################################################################################################################################################
+#firstName, lastName, password(hashed), user_id (hash of email+ password), email, birthday
+@app.route("/createUser", methods=['POST'])
+def createUser():
+	loadMe = json.dumps(request.form)
+	userInfo = json.loads(loadMe) #type dict
+	try:
+		uuid = generate_uuid(userInfo);
+		return uuid;
+		response = dynamodb.Table("195UserTable").put_item(
+				Item={
+					'userID' : uuid,
+					'firstName': userInfo["firstName"],
+					'lastName': userInfo["lastName"],
+					'password': sha256encrypt(userInfo["password"]),
+					'email' : userInfo["email"],
+					"birthday" : userInfo["birthday"]
+				}
+			)
+	except Exception as e:
+		return response_with(responses.INVALID_FIELD_NAME_SENT_422, value={"value": str(e)})
+	else:
+		return response_with(responses.SUCCESS_200, value={"value" : uuid});	
+
+
+@app.route("/signinUser", methods=['POST'])
+def signinUser():
+	loadMe = json.dumps(request.form)
+	userInfo = json.loads(loadMe);
+	try:
+		uuid = generate_uuid(userInfo);
+		response = dynamodb.Table("195UserTable").get_item(
+			Key={
+					'userID' : uuid,
+				}
+			)
+		item = response['Item'];
+	except Exception as e:
+	 	return response_with(responses.UNAUTHORIZED_401, value={"value": str(e)})	
+	else:
+		userUUID = json.loads(json.dumps(item))['userID'];
+		return response_with(responses.SUCCESS_200, value={"value": userUUID } );
+
+@app.route("/addPost", methods=['POST'])
+def addPost():
+	return 
+################################################################################################################################################
+################################################################################################################################################
 #foo@bar.com
 #foobar
 @app.route("/authlogin")
