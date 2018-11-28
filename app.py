@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request, session
 import utils.responses as responses
 from utils.responses import *
 from utils.hashing import *
+from utils.config import *
 #from flask.ext.session import Session
 import os
 import json
@@ -12,7 +13,7 @@ import hashlib
 import datetime
 import random
 from googlemaps import Client
-from config import *
+
 
 #from . import app
 #https://github.com/thisbejim/Pyrebase
@@ -96,13 +97,7 @@ def nothing():
 	return """Welcome to the Stranger Thingz backend, powered by Flask. <br> \
 	Created for CMPE195A-Senior Project at SJSU for Fall 2018 - Spring 2019. <br> \
 	Authors: Gwyneth Mina, Christopher Navy, Brendan Hui, and Jonathan Wong. <br> <br> \
-	possible endpoints: <br>\
-	/allusers <br> \
-	/authcreateuser?email=EMAIL@DOMAIN.COM&password=PASSWORD <br>\
-	/authlogin?email=EMAIL@DOMAIN.COM&password=PASSWORD <br> \
-	/authresetpassword?email=EMAIL@DOMAIN.COM <br> \
-	/geodirections?start=START&end=END (params: literal location: "San Francisco, California" or coordinates: '37.4215420,-122.0840110') <br> \
-	last commit: 7/12/2018""";
+	last commit: 11/28/2018""";
 
 @app.route("/geodirections")
 def geolocation():
