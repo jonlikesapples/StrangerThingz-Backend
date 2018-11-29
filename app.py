@@ -154,11 +154,11 @@ def createUser():
 		response = dynamodb.Table("195UserTable").put_item(
 				Item={
 					'userID' : uuid,
-					'firstName': userInfo["firstName"],
-					'lastName': userInfo["lastName"],
+					'firstName': userInfo["firstName"].lower(),
+					'lastName': userInfo["lastName"].lower(),
 					'password': sha256encrypt(userInfo["password"]),
-					'email' : userInfo["email"],
-					"birthday" : userInfo["birthday"]
+					'email' : userInfo["email"].lower(),
+					"birthday" : userInfo["birthday"].lower()
 				}
 			)
 	except Exception as e:
@@ -192,13 +192,13 @@ def addPost():
 	try:
 		response = dynamodb.Table("195PostsTable").put_item(
 				Item={
-						'postID' : sha256encrypt(postInfo["city"]),
-						'city' : postInfo["city"],
-						'name' : postInfo["name"],
-						'date' : postInfo["date"],
-						'time' : postInfo["time"],
-						'description' : postInfo["description"],
-						'userID' : postInfo['userID']
+						'postID' : sha256encrypt(postInfo["city"]+postInfo["name"]),
+						'city' : postInfo["city"].lower(),
+						'name' : postInfo["name"].lower(),
+						'date' : postInfo["date"].lower(),
+						'time' : postInfo["time"].lower(),
+						'description' : postInfo["description"].lower(),
+						'userID' : postInfo['userID'].lower()
 						# 'coordinates' : postInfo["coordinates"] #format: (lat, long)
  				}
 			)
@@ -207,14 +207,12 @@ def addPost():
 	else:
 		return response_with(responses.SUCCESS_200, value={"value" : "success"});	
 
-
-
-@app.route("/testscan", methods=['GET'])
+@app.route("/getPosts", methods=['GET'])
 def testscan():
-	#https://boto3.amazonaws.com/v1/documentation/api/latest/_modules/boto3/dynamodb/conditions.html
-	fe = Key('firstName').eq("bob")
-	response = dynamodb.Table("195UserTable").scan( FilterExpression = fe );
-	return jsonify(response);
+	city = str(request.args.get('city'));	
+	fe = Key('city').eq(city)
+	response = dynamodb.Table("195PostsTable").scan( FilterExpression = fe );
+	return jsonify(response["Items"]);
 
 ################################################################################################################################################
 ################################################################################################################################################
