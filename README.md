@@ -2,7 +2,7 @@
 
 <br/> https://strangerthingz-backend.herokuapp.com/
 
-<br/>Created for CMPE195A-Senior Project at SJSU for Spring 2018 - Fall 2018.
+<br/>Created for CMPE195A/B-Senior Project at SJSU for Spring 2018 - Fall 2018.
 
 Authors: Gwyneth Mina, Christopher Navy, Brendan Hui, and Jonathan Wong. 
 
