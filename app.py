@@ -122,28 +122,6 @@ def jsontest():
 	}
 	return jsonify(returnme);
 
-#works properly: password needs to be at least 8 characters long
-#error handling works in front-end
-@app.route("/authcreateuser")
-def specialpost():
-	email = str(request.args.get('email')); #gets email parameter from link ?email=EMAIL&
-	print(request.args.get('email'));
-	#password = sha256encrypt(str(request.args.get('password')));
-	#password encryption in front end?
-	password = str(request.args.get('password'));
-	user = auth.create_user_with_email_and_password(email, password);
-
-	now = datetime.datetime.now()
-	data = {
-	"dateCreated": str(now),
-	"importantinfo": "this is the entry for: " + email
-		}
-	results = db.child("users").child(user['localId']).set(data)
-	return "posted <br> \
-	" + json.dumps(auth.get_account_info(user['idToken']));
-
-################################################NEW STUFF NEW STUFF NEW STUFF ########################################################################
-################################################################################################################################################
 #firstName, lastName, password(hashed), user_id (hash of email+ password), email, birthday
 @app.route("/createUser", methods=['POST'])
 def createUser():
@@ -164,7 +142,7 @@ def createUser():
 	except Exception as e:
 		return response_with(responses.INVALID_FIELD_NAME_SENT_422, value={"value": str(e)})
 	else:
-		return response_with(responses.SUCCESS_200, value={"value" : uuid});	
+		return response_with(responses.SUCCESS_200, value={"value" : uuid});
 
 
 @app.route("/signinUser", methods=['POST'])
@@ -180,7 +158,7 @@ def signinUser():
 			)
 		item = response['Item'];
 	except Exception as e:
-	 	return response_with(responses.UNAUTHORIZED_401, value={"value": str(e)})	
+	 	return response_with(responses.UNAUTHORIZED_401, value={"value": str(e)})
 	else:
 		userUUID = json.loads(json.dumps(item))['userID'];
 		return response_with(responses.SUCCESS_200, value={"value": userUUID } );
@@ -205,11 +183,11 @@ def addPost():
 	except Exception as e:
 		return response_with(responses.INVALID_FIELD_NAME_SENT_422, value={"value": str(e)})
 	else:
-		return response_with(responses.SUCCESS_200, value={"value" : "success"});	
+		return response_with(responses.SUCCESS_200, value={"value" : "success"});
 
 @app.route("/getPosts", methods=['GET'])
 def testscan():
-	city = str(request.args.get('city'));	
+	city = str(request.args.get('city'));
 	fe = Key('city').eq(city)
 	response = dynamodb.Table("195PostsTable").scan( FilterExpression = fe );
 	return jsonify(response["Items"]);
