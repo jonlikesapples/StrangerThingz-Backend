@@ -12,7 +12,7 @@ from boto3.dynamodb.conditions import Key, Attr
 import hashlib
 import datetime
 import random
-from googlemaps import Client
+# from googlemaps import Client
 
 
 #from . import app
@@ -74,7 +74,7 @@ def inccount():
 	dbresult = db.child("totalnumofusers").get()
 	QUERY_RESULT = ""
 	newcount = 123
-	for user in dbresult.each():
+	for user in dbresult.each(): #
 		QUERY_RESULT += "key: " + str(user.key()) + " " + "val: " + str(user.val()) + "<br>"
 		newcount = user.val() + 1;
 		break;
@@ -151,15 +151,14 @@ def createUser():
 	userInfo = json.loads(loadMe) #type dict
 	try:
 		uuid = generate_uuid(userInfo);
-		return uuid;
 		response = dynamodb.Table("195UserTable").put_item(
 				Item={
 					'userID' : uuid,
-					'firstName': userInfo["firstName"],
-					'lastName': userInfo["lastName"],
+					'firstName': userInfo["firstName"].lower(),
+					'lastName': userInfo["lastName"].lower(),
 					'password': sha256encrypt(userInfo["password"]),
-					'email' : userInfo["email"],
-					"birthday" : userInfo["birthday"]
+					'email' : userInfo["email"].lower(),
+					"birthday" : userInfo["birthday"].lower()
 				}
 			)
 	except Exception as e:
@@ -188,7 +187,33 @@ def signinUser():
 
 @app.route("/addPost", methods=['POST'])
 def addPost():
-	return 
+	loadMe = json.dumps(request.form)
+	postInfo = json.loads(loadMe)
+	try:
+		response = dynamodb.Table("195PostsTable").put_item(
+				Item={
+						'postID' : sha256encrypt(postInfo["city"]+postInfo["name"]),
+						'city' : postInfo["city"].lower(),
+						'name' : postInfo["name"].lower(),
+						'date' : postInfo["date"].lower(),
+						'time' : postInfo["time"].lower(),
+						'description' : postInfo["description"].lower(),
+						'userID' : postInfo['userID'].lower()
+						# 'coordinates' : postInfo["coordinates"] #format: (lat, long)
+ 				}
+			)
+	except Exception as e:
+		return response_with(responses.INVALID_FIELD_NAME_SENT_422, value={"value": str(e)})
+	else:
+		return response_with(responses.SUCCESS_200, value={"value" : "success"});	
+
+@app.route("/getPosts", methods=['GET'])
+def testscan():
+	city = str(request.args.get('city'));	
+	fe = Key('city').eq(city)
+	response = dynamodb.Table("195PostsTable").scan( FilterExpression = fe );
+	return jsonify(response["Items"]);
+
 ################################################################################################################################################
 ################################################################################################################################################
 #foo@bar.com
