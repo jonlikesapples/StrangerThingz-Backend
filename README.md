@@ -6,8 +6,11 @@ Created for CMPE195A-Senior Project at SJSU for Fall 2018 - Spring 2019.
 Authors: Gwyneth Mina, Christopher Navy, Brendan Hui, and Jonathan Wong. 
 
 
-## Install Flask 
+## Install Dependencies
 
 ```bash
-pip install Flask 
+pip install -r requirements.txt
 ```
+
+
+
