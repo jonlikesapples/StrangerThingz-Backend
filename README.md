@@ -1,8 +1,7 @@
-#Stranger Thingz Backend, powered by Flask
+# Stranger Thingz Backend, powered by Flask
 
 <br/> https://strangerthingz-backend.herokuapp.com/
-
-Created for CMPE195A-Senior Project at SJSU for Fall 2018 - Spring 2019. 
+Created for CMPE195A-Senior Project at SJSU for Spring 2018 - Fall 2018. 
 
 Authors: Gwyneth Mina, Christopher Navy, Brendan Hui, and Jonathan Wong. 
 
@@ -13,7 +12,7 @@ Stranger Thangz, is a mobile application that focuses on its users to connect wi
 ## Landing Page
 
 
-## Clone Repo then install dependencies
+## Clone Repo then Install Dependencies
 
 ```bash
 pip install -r requirements.txt
