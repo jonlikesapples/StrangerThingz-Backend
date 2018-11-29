@@ -74,7 +74,7 @@ def inccount():
 	dbresult = db.child("totalnumofusers").get()
 	QUERY_RESULT = ""
 	newcount = 123
-	for user in dbresult.each():
+	for user in dbresult.each(): #
 		QUERY_RESULT += "key: " + str(user.key()) + " " + "val: " + str(user.val()) + "<br>"
 		newcount = user.val() + 1;
 		break;
@@ -151,7 +151,6 @@ def createUser():
 	userInfo = json.loads(loadMe) #type dict
 	try:
 		uuid = generate_uuid(userInfo);
-		return uuid;
 		response = dynamodb.Table("195UserTable").put_item(
 				Item={
 					'userID' : uuid,
@@ -188,7 +187,18 @@ def signinUser():
 
 @app.route("/addPost", methods=['POST'])
 def addPost():
-	return 
+	loadMe = json.dumps(request.form)
+	postInfo = json.loads(loadMe)
+	return "hi"
+
+
+@app.route("/testscan", methods=['GET'])
+def testscan():
+	#https://boto3.amazonaws.com/v1/documentation/api/latest/_modules/boto3/dynamodb/conditions.html
+	fe = Key('firstName').eq("bob")
+	response = dynamodb.Table("195UserTable").scan( FilterExpression = fe );
+	return jsonify(response);
+
 ################################################################################################################################################
 ################################################################################################################################################
 #foo@bar.com
