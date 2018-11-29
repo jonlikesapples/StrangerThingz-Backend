@@ -12,7 +12,7 @@ from boto3.dynamodb.conditions import Key, Attr
 import hashlib
 import datetime
 import random
-from googlemaps import Client
+# from googlemaps import Client
 
 
 #from . import app
@@ -189,7 +189,24 @@ def signinUser():
 def addPost():
 	loadMe = json.dumps(request.form)
 	postInfo = json.loads(loadMe)
-	return "hi"
+	try:
+		response = dynamodb.Table("195PostsTable").put_item(
+				Item={
+						'postID' : sha256encrypt(postInfo["city"]),
+						'city' : postInfo["city"],
+						'name' : postInfo["name"],
+						'date' : postInfo["date"],
+						'time' : postInfo["time"],
+						'description' : postInfo["description"],
+						'userID' : postInfo['userID']
+						# 'coordinates' : postInfo["coordinates"] #format: (lat, long)
+ 				}
+			)
+	except Exception as e:
+		return response_with(responses.INVALID_FIELD_NAME_SENT_422, value={"value": str(e)})
+	else:
+		return response_with(responses.SUCCESS_200, value={"value" : "success"});	
+
 
 
 @app.route("/testscan", methods=['GET'])
