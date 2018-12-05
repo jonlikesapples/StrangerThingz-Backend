@@ -157,11 +157,12 @@ def signinUser():
 				}
 			)
 		item = response['Item'];
+		# return jsonify(item);
 	except Exception as e:
 	 	return response_with(responses.UNAUTHORIZED_401, value={"value": str(e)})
 	else:
 		userUUID = json.loads(json.dumps(item))['userID'];
-		return response_with(responses.SUCCESS_200, value={"value": userUUID } );
+		return response_with(responses.SUCCESS_200, value={"value": item } );
 
 @app.route("/addPost", methods=['POST'])
 def addPost():
